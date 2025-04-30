@@ -75,16 +75,21 @@ print(f"Total folds (equal to total unique persons): {len(np.unique(person_ids))
 
 import tensorflow as tf
 
-# ✅ GPU Check (Insert this once after imports)
+# ✅ GPU Check
 gpus = tf.config.list_physical_devices('GPU')
 if gpus:
     print("✅ GPU(s) detected:", gpus)
-    try:
-        tf.config.experimental.set_memory_growth(gpus[0], True)  # Optional: prevent memory hogging
-    except RuntimeError as e:
-        print("Memory growth setting failed:", e)
+    # try:
+    #     for gpu in gpus:
+    #         tf.config.set_memory_growth(gpu, True)  # ✅ Use stable API
+    # except RuntimeError as e:
+    #     print("Memory growth setting failed:", e)
 else:
     print("⚠️ No GPU found. Training will run on CPU.")
+
+
+from tensorflow.python.client import device_lib
+print(device_lib.list_local_devices())
 
 
 import tensorflow as tf
