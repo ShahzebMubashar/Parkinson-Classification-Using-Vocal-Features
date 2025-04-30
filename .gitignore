@@ -1,0 +1,55 @@
+# Python-related
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+eggs/
+.eggs/
+*.egg-info/
+.tox/
+.nox/
+.coverage
+.hypothesis/
+.pytest_cache/
+.coverage.*
+*.log
+*.bak
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Virtual environments
+venv/
+env/
+.env/
+.venv/
+venv.bak/
+
+# Data science files
+*.h5           # TensorFlow model files
+*.pkl          # Pickled objects (e.g., trained models)
+*.csv          # If you don’t want to track data files like CSVs
+*.xlsx         # Similarly for Excel files
+*.json         # JSON files (if not required)
+*.zip          # Archives
+*.tar.gz
+*.tgz
+
+# TensorFlow specific
+saved_model/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+.vscode/
+
+# macOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
