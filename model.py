@@ -51,11 +51,12 @@ import tensorflow as tf
 gpus = tf.config.list_physical_devices('GPU')
 if gpus:
     print("✅ GPU(s) detected:", gpus)
-    # try:
-    #     for gpu in gpus:
-    #         tf.config.set_memory_growth(gpu, True)  # ✅ Use stable API
-    # except RuntimeError as e:
-    #     print("Memory growth setting failed:", e)
+    try:
+         for gpu in gpus:
+           tf.config.experimental.set_memory_growth(gpu, True)
+
+    except RuntimeError as e:
+         print("Memory growth setting failed:", e)
 else:
     print("⚠️ No GPU found. Training will run on CPU.")
 
@@ -148,9 +149,9 @@ for fold_counter, (train_idx, test_idx) in enumerate(splits[:total_folds // 2], 
 
     print(f"✅ Fold {fold_counter}: Accuracy = {accuracy_score(y_test, y_pred):.4f}")
 
-# Save the last trained model
-model.save('parkinson_cnn_model.h5')
-print("✅ Model saved as 'parkinson_cnn_model.h5'")
+# # Save the last trained model
+# model.save('parkinson_cnn_model.h5')
+# print("✅ Model saved as 'parkinson_cnn_model.h5'")
 
 accuracy = accuracy_score(all_labels, all_preds)
 f1 = f1_score(all_labels, all_preds)
