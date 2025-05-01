@@ -147,3 +147,13 @@ for fold_counter, (train_idx, test_idx) in enumerate(splits[:total_folds // 2], 
     all_labels.extend(y_test)
 
     print(f"✅ Fold {fold_counter}: Accuracy = {accuracy_score(y_test, y_pred):.4f}")
+
+
+accuracy = accuracy_score(all_labels, all_preds)
+f1 = f1_score(all_labels, all_preds)
+mcc = matthews_corrcoef(all_labels, all_preds)
+
+print(f"\n🏁 Full LOPO Results After All Folds:")
+print(f"🔹 Accuracy : {accuracy:.4f}")
+print(f"🔹 F1-Score : {f1:.4f}")
+print(f"🔹 MCC      : {mcc:.4f}")
