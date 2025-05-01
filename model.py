@@ -83,21 +83,22 @@ def build_model_level_cnn(input_shapes):
     inputs, branches = [], []
     for shape in input_shapes:
         inp = Input(shape=shape)
-        x = Conv1D(32, kernel_size=8, activation='relu', kernel_regularizer=l2(0.001))(inp)
-        x = Conv1D(32, kernel_size=8, activation='relu', kernel_regularizer=l2(0.001))(x)
+        x = Conv1D(32, kernel_size=3, activation='relu', kernel_regularizer=l2(0.001))(inp)
+        x = Conv1D(32, kernel_size=3, activation='relu', kernel_regularizer=l2(0.001))(x)
         x = MaxPooling1D(pool_size=2)(x)
 
-        x = Conv1D(64, kernel_size=8, activation='relu', kernel_regularizer=l2(0.001))(x)
-        x = Conv1D(64, kernel_size=8, activation='relu', kernel_regularizer=l2(0.001))(x)
+        x = Conv1D(64, kernel_size=3, activation='relu', kernel_regularizer=l2(0.001))(x)
+        x = Conv1D(64, kernel_size=3, activation='relu', kernel_regularizer=l2(0.001))(x)
         x = MaxPooling1D(pool_size=2)(x)
 
-        x = Conv1D(128, kernel_size=8, activation='relu', kernel_regularizer=l2(0.001))(x)
-        x = Conv1D(128, kernel_size=8, activation='relu', kernel_regularizer=l2(0.001))(x)
+        x = Conv1D(128, kernel_size=3, activation='relu', kernel_regularizer=l2(0.001))(x)
+        x = Conv1D(128, kernel_size=3, activation='relu', kernel_regularizer=l2(0.001))(x)
         x = MaxPooling1D(pool_size=2)(x)
 
         x = Flatten()(x)
         inputs.append(inp)
         branches.append(x)
+
 
     merged = concatenate(branches)
     merged = Dropout(0.3)(merged)
