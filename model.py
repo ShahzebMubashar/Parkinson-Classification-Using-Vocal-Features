@@ -44,6 +44,25 @@ pd_speech_features[['gender', 'class']] = pd_speech_features[['gender', 'class']
 labels = pd_speech_features['class'].astype(int)
 person_ids = pd_speech_features['id'].astype(int)
 
+
+import tensorflow as tf
+
+# ✅ GPU Check
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    print("✅ GPU(s) detected:", gpus)
+    # try:
+    #     for gpu in gpus:
+    #         tf.config.set_memory_growth(gpu, True)  # ✅ Use stable API
+    # except RuntimeError as e:
+    #     print("Memory growth setting failed:", e)
+else:
+    print("⚠️ No GPU found. Training will run on CPU.")
+
+
+from tensorflow.python.client import device_lib
+print(device_lib.list_local_devices())
+
 # Feature sets
 mfccs = pd_speech_features.iloc[:, 22:84].astype(float)  # approximate MFCC range
 wavelets = pd_speech_features.iloc[:, 84:148].astype(float)  # approximate Wavelet range
