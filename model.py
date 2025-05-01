@@ -74,6 +74,12 @@ mfccs_scaled = scaler.fit_transform(mfccs)
 wavelets_scaled = scaler.fit_transform(wavelets)
 tqwts_scaled = scaler.fit_transform(tqwts)
 
+# ✅ Step 1: Convert to float32 to reduce memory
+mfccs_scaled = mfccs_scaled.astype(np.float32)
+wavelets_scaled = wavelets_scaled.astype(np.float32)
+tqwts_scaled = tqwts_scaled.astype(np.float32)
+
+
 # Setup LOPO-CV
 logo = LeaveOneGroupOut()
 splits = list(logo.split(mfccs_scaled, labels, groups=person_ids))
@@ -108,6 +114,8 @@ def build_model_level_cnn(input_shapes):
 all_preds, all_labels = [], []
 total_folds = len(splits)
 
+
+
 for fold_counter, (train_idx, test_idx) in enumerate(splits[:total_folds // 2], start=1):
     print(f"\n🔄 Fold {fold_counter} / {total_folds // 2}: Training...")
 
@@ -126,12 +134,13 @@ for fold_counter, (train_idx, test_idx) in enumerate(splits[:total_folds // 2], 
               np.expand_dims(X_test_tqwt, axis=2)]
     y_train, y_test = labels.iloc[train_idx], labels.iloc[test_idx]
 
-    # ✅ Use tf.data pipeline
+    # ✅ Use tf.data pipeline with smaller batch size
     train_dataset = tf.data.Dataset.from_tensor_slices((tuple(X_train), y_train))
-    train_dataset = train_dataset.shuffle(1024).batch(64).prefetch(tf.data.AUTOTUNE)
+    train_dataset = train_dataset.shuffle(1024).batch(32).prefetch(tf.data.AUTOTUNE)  # ✅ Step 2: reduced batch size
 
     test_dataset = tf.data.Dataset.from_tensor_slices((tuple(X_test), y_test))
-    test_dataset = test_dataset.batch(64).prefetch(tf.data.AUTOTUNE)
+    test_dataset = test_dataset.batch(32).prefetch(tf.data.AUTOTUNE)  # ✅ Step 2: reduced batch size
+
 
     model = build_model_level_cnn([x.shape[1:] for x in X_train])
     model.fit(train_dataset, epochs=200, verbose=0)
