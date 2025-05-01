@@ -5,10 +5,14 @@ import requests
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.metrics import accuracy_score, f1_score, matthews_corrcoef
+from tensorflow.keras import mixed_precision
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Conv1D, MaxPooling1D, Flatten, Dense, Dropout, concatenate
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.optimizers import Adam
+
+# ✅ Enable mixed precision for RTX 3050
+# mixed_precision.set_global_policy('mixed_float16')
 
 # Download dataset
 url = 'https://raw.githubusercontent.com/dcleres/Parkinson_Disease_ML/refs/heads/master/pd_speech_features.csv'
@@ -46,7 +50,7 @@ import tensorflow as tf
 from tensorflow.keras import mixed_precision
 
 # ✅ Enable mixed precision (speeds up RTX 3050)
-mixed_precision.set_global_policy('mixed_float16')
+# mixed_precision.set_global_policy('mixed_float16')
 
 # ✅ GPU Check
 gpus = tf.config.list_physical_devices('GPU')
@@ -117,7 +121,7 @@ total_folds = len(splits)
 
 
 for fold_counter, (train_idx, test_idx) in enumerate(splits, start=1):
-    print(f"\n🔄 Fold {fold_counter} / {total_folds // 2}: Training...")
+    print(f"\n🔄 Fold {fold_counter} / {total_folds}: Training...")
 
     X_train_mfcc = mfccs_scaled[train_idx]
     X_test_mfcc = mfccs_scaled[test_idx]
@@ -150,6 +154,8 @@ for fold_counter, (train_idx, test_idx) in enumerate(splits, start=1):
     all_labels.extend(y_test)
 
     print(f"✅ Fold {fold_counter}: Accuracy = {accuracy_score(y_test, y_pred):.4f}")
+    tf.keras.backend.clear_session()
+
 
 accuracy = accuracy_score(all_labels, all_preds)
 f1 = f1_score(all_labels, all_preds)
