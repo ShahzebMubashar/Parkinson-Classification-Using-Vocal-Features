@@ -148,6 +148,9 @@ for fold_counter, (train_idx, test_idx) in enumerate(splits[:total_folds // 2], 
 
     print(f"✅ Fold {fold_counter}: Accuracy = {accuracy_score(y_test, y_pred):.4f}")
 
+# Save the last trained model
+model.save('parkinson_cnn_model.h5')
+print("✅ Model saved as 'parkinson_cnn_model.h5'")
 
 accuracy = accuracy_score(all_labels, all_preds)
 f1 = f1_score(all_labels, all_preds)
